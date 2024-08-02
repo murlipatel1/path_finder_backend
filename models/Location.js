@@ -1,6 +1,8 @@
 // name of location , latitude , logitude , location id
 
-const LocationSchema = new Schema({
+const mongoose = require('mongoose');
+
+const LocationSchema = new mongoose.Schema({
     location_name: {
         type: String,
         required: true

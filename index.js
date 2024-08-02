@@ -1,22 +1,28 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const db = require('./config/db');
+
+//Default port 3000
 PORT = 3000 || process.env.PORT;
+
+db.then(() => {
+    console.log('Connected to database');
+}).catch((err) => {
+    console.log('Error connecting to database', err);
+});
 
 app = express();
 
 
 app.use(bodyParser.json());
 
-app.use('/location', require('./routes/location'));
-app.use('/roads', require('./routes/roads'));
+// app.use('/locations', require('./routes/locations'));
+app.use('/', require('./routes/roads'));
 
-app.get('/', (req, res) => {
-    res.send('Path Finder api');
-});
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
-
 
 module.exports = app;

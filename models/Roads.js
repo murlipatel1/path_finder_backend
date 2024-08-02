@@ -1,5 +1,8 @@
 // road_id , latest timestamp, traffic_condition , start_location_id , end_location_id , distance
-const RoadSchema = new Schema({
+
+const mongoose = require('mongoose');
+
+const RoadSchema = new mongoose.Schema({
      road_id: {
             type: Number,
             required: true
