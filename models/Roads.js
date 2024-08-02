@@ -9,7 +9,8 @@ const RoadSchema = new mongoose.Schema({
          },
         latest_timestamp: {
                 type: Date,
-                required: true
+                required: true,
+                default: Date.now
             },
         traffic_condition: {
                 type: String,
