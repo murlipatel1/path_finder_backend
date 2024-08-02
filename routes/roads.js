@@ -122,10 +122,8 @@ const findShortestPath = (start, end, roads) => {
         const current = queue.shift();
         const currentId = current.id;
 
-        // If we reached the end, build the path
         if (currentId === end) break;
 
-        // Update distances for neighbors
         roads.forEach(road => {
             if (road.start_location_id === currentId || road.end_location_id === currentId) {
                 const neighbor = road.start_location_id === currentId ? road.end_location_id : road.start_location_id;
@@ -158,13 +156,6 @@ const findShortestPath = (start, end, roads) => {
 
     return { path, distance: distances[end] , estimatedTime};
 };
-
-// router.get('/shortest-path', (req, res) => {
-//     const { start_location_id, end_location_id } = req.query;
-//     //write logic to find the shortest path between id1 and id2 if id could not be found direct from the ids use roads database to get id of next then search from that location id and iterate till we get end location id and find the shortest path
-
-//     res.send(`Shortest path from ${start_location_id} to ${end_location_id}`);
-// });
 
 router.get('/shortest-path', async (req, res) => {
     const { start_location_id, end_location_id } = req.query;

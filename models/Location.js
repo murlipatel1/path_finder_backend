@@ -1,5 +1,3 @@
-// name of location , latitude , logitude , location id
-
 const mongoose = require('mongoose');
 
 const LocationSchema = new mongoose.Schema({
