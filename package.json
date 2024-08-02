@@ -1,0 +1,24 @@
+{
+  "name": "path-finder",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/murlipatel1/shipmnts_path_finder.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/murlipatel1/shipmnts_path_finder/issues"
+  },
+  "homepage": "https://github.com/murlipatel1/shipmnts_path_finder#readme",
+  "dependencies": {
+    "express": "^4.19.2",
+    "mongoose": "^8.5.2"
+  }
+}
