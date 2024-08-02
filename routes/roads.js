@@ -3,11 +3,60 @@ const router = express.Router();
 const Roads = require('../models/Roads');
 const Location = require('../models/Location');
 
+
+
+// const LocationSchema = new mongoose.Schema({
+//     location_name: {
+//         type: String,
+//         required: true
+//     },
+//     latitude: {
+//         type: Number,
+//         required: true
+//     },
+//     longitude: {
+//         type: Number,
+//         required: true
+//     },
+//     location_id: {
+//         type: Number,
+//         required: true
+//     }
+// });
+// const RoadSchema = new mongoose.Schema({
+//     road_id: {
+//            type: Number,
+//            required: true
+//         },
+//        latest_timestamp: {
+//                type: Date,
+//                required: true,
+//                default: Date.now
+//            },
+//        traffic_condition: {
+//                type: String,
+//                required: true
+//            },
+//        start_location_id: {
+//                type: Number,
+//                required: true
+//            },
+//        end_location_id: {
+//                type: Number,
+//                required: true
+//            },
+//        distance: {
+//                type: Number,
+//                required: true
+//            }
+// });
+
+
+
 // Endpoint: GET /
 router.get('/', (req, res) => {
     res.send('Path finder api');
 });
-
 
 //Endpoint: POST /locations
 //Request Body: { "name": "Location A", "latitude": 37.7749, "longitude": -122.4194 }
@@ -36,8 +85,6 @@ router.post('/locations', async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
-
-
 
 
 // Endpoint: POST /roads
@@ -103,11 +150,95 @@ router.post('/traffic-updates', async (req, res) => {
 // "estimated_time": 15 
 // }
 
-router.get('/shortest-path', (req, res) => {
-    const { start_location_id, end_location_id } = req.query;
-    //write logic to find the shortest path between id1 and id2
+const findShortestPath = (start, end, roads) => {
+    const distances = {};
+    const previous = {};
+    const queue = [];
+    const estimatedTime = 0;
 
-    res.send(`Shortest path from ${start_location_id} to ${end_location_id}`);
+    // Initialize distances and queue
+    roads.forEach(road => {
+        distances[road.start_location_id] = Infinity;
+        distances[road.end_location_id] = Infinity;
+    });
+    distances[start] = 0;
+
+    queue.push({ id: start, distance: 0 });
+
+    while (queue.length > 0) {
+        // Sort the queue by distance
+        queue.sort((a, b) => a.distance - b.distance);
+
+        const current = queue.shift();
+        const currentId = current.id;
+
+        // If we reached the end, build the path
+        if (currentId === end) break;
+
+        // Update distances for neighbors
+        roads.forEach(road => {
+            if (road.start_location_id === currentId || road.end_location_id === currentId) {
+                const neighbor = road.start_location_id === currentId ? road.end_location_id : road.start_location_id;
+                const newDistance = distances[currentId] + road.distance;
+
+                if(road.traffic_condition === "Heavy"){
+                    estimatedTime = estimatedTime + 15;
+                }else if(road.traffic_condition === "Moderate"){
+                    estimatedTime = estimatedTime + 10;
+                }else if(road.traffic_condition === "Low"){
+                    estimatedTime = estimatedTime + 5;
+                }
+
+                if (newDistance < distances[neighbor]) {
+                    distances[neighbor] = newDistance;
+                    previous[neighbor] = currentId;
+                    queue.push({ id: neighbor, distance: newDistance });
+                }
+            }
+        });
+    }
+
+    // Build the shortest path
+    const path = [];
+    let currentNode = end;
+    while (currentNode) {
+        path.unshift(currentNode);
+        currentNode = previous[currentNode];
+    }
+
+    return { path, distance: distances[end] , estimatedTime};
+};
+
+// router.get('/shortest-path', (req, res) => {
+//     const { start_location_id, end_location_id } = req.query;
+//     //write logic to find the shortest path between id1 and id2 if id could not be found direct from the ids use roads database to get id of next then search from that location id and iterate till we get end location id and find the shortest path
+
+//     res.send(`Shortest path from ${start_location_id} to ${end_location_id}`);
+// });
+
+router.get('/shortest-path', async (req, res) => {
+    const { start_location_id, end_location_id } = req.query;
+
+    try {
+        // Parse location ids to integers
+        const startId = parseInt(start_location_id);
+        const endId = parseInt(end_location_id);
+
+        // Fetch all roads from the database
+        const roads = await Roads.find({});
+
+ 
+        const result = findShortestPath(startId, endId, roads);
+
+        res.status(200).json({
+            path: result.path,
+            total_distance: result.distance,
+            estimated_time: result.estimatedTime
+        });
+
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
 });
 
 // Endpoint: GET /roads/{id}/traffic-condition
