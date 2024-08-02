@@ -2,6 +2,8 @@
 
 ## API
 
+## This will give you the details of the given all API listed below 
+
 ### Endpoint: POST /locations
 Request Body: { "name": "Location A", "latitude": 37.7749, "longitude": -122.4194 }
 Response: `201 Created` with the created location.
@@ -37,9 +39,6 @@ Response: `200 OK` with the calculated path
 
 #### Sample Code:
 ![image](https://github.com/user-attachments/assets/3ea55eba-1591-467e-80cc-903c7e53ee57)
-
-
-
 
 
 
