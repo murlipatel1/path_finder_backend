@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+// Define the schema for the roads
 const RoadSchema = new mongoose.Schema({
      road_id: {
             type: Number,

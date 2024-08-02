@@ -63,7 +63,6 @@ router.post('/roads', async (req, res) => {
 // Request Body: { "road_id": 1, "timestamp": "2024-06-25T14:00:00Z", "traffic_condition": "heavy" }
 // Response: `201 Created` with the created traffic update.
 // Find road_id in Roads model and update the traffic_condition
-
 router.post('/traffic-updates', async (req, res) => {
     const { road_id, timestamp, traffic_condition } = req.body;
 
@@ -100,6 +99,7 @@ router.post('/traffic-updates', async (req, res) => {
 // "estimated_time": 15 
 // }
 
+// Find the shortest path between two locations using Dijkstra's algorithm
 const findShortestPath = (start, end, roads) => {
     const distances = {};
     const previous = {};
@@ -121,9 +121,10 @@ const findShortestPath = (start, end, roads) => {
 
         const current = queue.shift();
         const currentId = current.id;
-
+        
         if (currentId === end) break;
 
+        // Searching through each neighbour
         roads.forEach(road => {
             if (road.start_location_id === currentId || road.end_location_id === currentId) {
                 const neighbor = road.start_location_id === currentId ? road.end_location_id : road.start_location_id;

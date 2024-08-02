@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+// Define the schema for the locations
 const LocationSchema = new mongoose.Schema({
     location_name: {
         type: String,
