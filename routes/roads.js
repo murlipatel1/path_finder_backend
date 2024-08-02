@@ -3,56 +3,6 @@ const router = express.Router();
 const Roads = require('../models/Roads');
 const Location = require('../models/Location');
 
-
-
-// const LocationSchema = new mongoose.Schema({
-//     location_name: {
-//         type: String,
-//         required: true
-//     },
-//     latitude: {
-//         type: Number,
-//         required: true
-//     },
-//     longitude: {
-//         type: Number,
-//         required: true
-//     },
-//     location_id: {
-//         type: Number,
-//         required: true
-//     }
-// });
-// const RoadSchema = new mongoose.Schema({
-//     road_id: {
-//            type: Number,
-//            required: true
-//         },
-//        latest_timestamp: {
-//                type: Date,
-//                required: true,
-//                default: Date.now
-//            },
-//        traffic_condition: {
-//                type: String,
-//                required: true
-//            },
-//        start_location_id: {
-//                type: Number,
-//                required: true
-//            },
-//        end_location_id: {
-//                type: Number,
-//                required: true
-//            },
-//        distance: {
-//                type: Number,
-//                required: true
-//            }
-// });
-
-
-
 // Endpoint: GET /
 router.get('/', (req, res) => {
     res.send('Path finder api');
